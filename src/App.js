@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import './App.css';
 
@@ -12,6 +12,8 @@ function App() {
   );
 }
 
+var funcStyle = 'color : blue';
+var funcId = 0;
 function FuncComp(props){
   var numberState = useState(props.initNumber); //useState returns an array.
   var number = numberState[0]; //state value
@@ -22,6 +24,24 @@ function FuncComp(props){
   //var setDate = dateState[1];  
   var [_date, setDate] = useState((new Date()).toString()); 
   
+  //side effect
+  useEffect(() => {
+    console.log('%cfunc => useEffect number (componentDidMount & componentDidUpdate) '+(++funcId), funcStyle);
+    document.title = number;
+    return () => { //cleanup
+      console.log('%cfunc => useEffect number return (componentDidMount & componentDidUpdate) '+(++funcId), funcStyle);
+    }
+  }, [number]); //Using second parameter, can skip 
+
+  useEffect(() => {
+    console.log('%cfunc => useEffect _date (componentDidMount & componentDidUpdate) '+(++funcId), funcStyle);
+    document.title = _date;
+    return () => { //cleanup
+      console.log('%cfunc => useEffect _date return (componentDidMount & componentDidUpdate) '+(++funcId), funcStyle);
+    }
+  }, [_date]);
+
+  console.log('%cfunc => render'+(++funcId), funcStyle);
   return (
     <div className="container">
       <h2>function style component</h2>
